@@ -20,6 +20,8 @@ public class ClientConsole {
 	private final static String EXIT = "exit";
 	
 	private final static String SUBMIT = "submit";
+	
+	protected static final int REG_PORT = 6666;
 
 	private static String schedulerAddr = null;
 	
@@ -97,7 +99,7 @@ public class ClientConsole {
 		while ((line = br.readLine()) != null) {
 			long time = Long.parseLong(line);
 			Request req = new SleepRequest(InetAddress.getLocalHost().getHostAddress(), 
-					localPort, path + lineNum, time);
+					REG_PORT, path + lineNum, time);
 			client.submit(req);
 			lineNum++;
 		}
