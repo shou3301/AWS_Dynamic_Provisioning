@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import org.apache.log4j.Logger;
 import org.iit.cshou.dp.client.SimpleFeedback;
 import org.iit.cshou.dp.intl.Feedback;
 import org.iit.cshou.dp.intl.FeedbackHandler;
@@ -20,6 +21,8 @@ import org.iit.cshou.dp.intl.Request;
  *
  */
 public class Worker implements Runnable {
+	
+	private static Logger log = Logger.getLogger(Worker.class);
 	
 	private Request request = null;
 	
@@ -38,6 +41,8 @@ public class Worker implements Runnable {
 		leader.notifyStart();
 		
 		try {
+			
+			log.info("Running job: " + request);
 			
 			request.execute();
 			

@@ -19,7 +19,7 @@ public class JobSchedulerMain {
 		try {
 			
 			JobScheduler js = new JobScheduler(port);
-			new Thread(js, "Thread-JobScheduler").run();
+			new Thread(js, "Thread-JobScheduler").start();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -80,6 +80,8 @@ public class ClientConsole {
 			}
 		}
 		
+		br.close();
+		
 	}
 	
 	private static void printHelp () {
@@ -103,6 +105,8 @@ public class ClientConsole {
 			client.submit(req);
 			lineNum++;
 		}
+		
+		br.close();
 		
 	}
 	

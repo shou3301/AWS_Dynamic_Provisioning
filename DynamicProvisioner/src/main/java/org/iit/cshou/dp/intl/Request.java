@@ -48,5 +48,12 @@ public abstract class Request implements Serializable {
 	 * real implementation of what to execute of the request
 	 */
 	public abstract void execute () throws Exception;
+	
+	@Override
+	public String toString () {
+		return "[Sender Addr: " + this.senderAddr + 
+				"] [Sender Port : " + this.senderPort +
+				"] [Request ID: " + this.requestId + "]";
+	}
 
 }

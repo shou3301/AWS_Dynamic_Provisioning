@@ -5,6 +5,8 @@ package org.iit.cshou.dp.worker;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.log4j.Logger;
+import org.iit.cshou.dp.client.SimpleClient;
 import org.iit.cshou.dp.intl.Request;
 
 /**
@@ -12,6 +14,8 @@ import org.iit.cshou.dp.intl.Request;
  *
  */
 public class WorkerLeader extends Thread {
+	
+	private static Logger log = Logger.getLogger(WorkerLeader.class);
 
 	protected long interval = 1;
 	
@@ -64,9 +68,14 @@ public class WorkerLeader extends Thread {
 					if (!queue.empty()) {
 						
 						Request req = queue.dequeue();
-						new Thread(new Worker(req, this)).run();
+						
+						log.info("Pulled request from queue: " + req);
+						
+						new Thread(new Worker(req, this)).start();
 						
 					}
+					
+					i++;
 					
 				}
 				

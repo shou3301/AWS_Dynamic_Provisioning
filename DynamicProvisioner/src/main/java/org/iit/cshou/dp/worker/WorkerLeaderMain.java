@@ -23,7 +23,7 @@ public class WorkerLeaderMain {
 		int batchNum = Integer.parseInt(args[2]);
 		
 		WorkerLeader wl = new WorkerLeader(interval, threshold, batchNum);
-		wl.run();
+		wl.start();
 		
 	}
 
