@@ -11,7 +11,7 @@ public class QueueServiceTest {
 	@Test
 	public void testEnqueue() {
 
-		QueueService qs = QueueService.getQueueService();
+		QueueService qs = QueueService.createQueueService();
 		
 		Request req1 = new SleepRequest("locahost", 1000, "id-1", 10);
 		Request req2 = new SleepRequest("locahost", 1000, "id-2", 10);
@@ -23,14 +23,16 @@ public class QueueServiceTest {
 			qs.enqueue(req2);
 			qs.enqueue(req3);
 			
-			Object obj = null;
+//			Object obj = null;
+//			
+//			while ((obj = qs.dequeue()) != null) {
+//				
+//				Request tmp = (Request) obj;
+//				System.out.println(":) Get the result: " + tmp);
+//				
+//			}
 			
-			while ((obj = qs.dequeue()) != null) {
-				
-				Request tmp = (Request) obj;
-				System.out.println(":) Get the result: " + tmp);
-				
-			}
+			System.out.println(qs.size());
 			
 		} catch (Exception e) {
 			e.printStackTrace();

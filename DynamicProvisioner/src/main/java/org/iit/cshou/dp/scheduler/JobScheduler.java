@@ -9,6 +9,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import org.apache.log4j.Logger;
+import org.iit.cshou.dp.aws.QueueService;
 import org.iit.cshou.dp.client.SimpleClient;
 import org.iit.cshou.dp.intl.Request;
 import org.iit.cshou.dp.intl.RequestHandler;
@@ -32,20 +33,29 @@ public class JobScheduler implements Runnable {
 	 * create a daemon, and pass in SQS and CloudWatch to monitor
 	 * 
 	 */
+	protected SchedulerDaemon schedulerDaemon = null;
+	protected QueueService queueService = null;
 	
 	// TODO only for test, to be removed later
-	protected TestQueue queue = null;
+	// protected TestQueue queue = null;
 	
 	public JobScheduler (int svcPort) throws Exception {
 		
 		this.svcPort = svcPort;
 		
-		queue = TestQueue.getQueue();
+		// queue = TestQueue.getQueue();
 		
 		// register service
 		Registry svcReg = LocateRegistry.createRegistry(REG_PORT);
 		RequestHandler requestHandler = new RequestHandlerImpl(svcPort, this);
 		svcReg.rebind(InetAddress.getLocalHost().getHostAddress() + "-request", requestHandler);
+		
+		// here is create queue
+		queueService = QueueService.createQueueService();
+		schedulerDaemon = new SchedulerDaemon(queueService, 30000, 1, 1, 10);
+		
+		// start daemon to monitor
+		schedulerDaemon.start();
 		
 	}
 	
@@ -54,7 +64,12 @@ public class JobScheduler implements Runnable {
 		// TODO put the request into a queue, later to SQS
 		
 		log.info("Received a request and put into queue: " + request);
-		queue.enqueue(request);
+		// queue.enqueue(request);
+		try {
+			queueService.enqueue(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void run() {

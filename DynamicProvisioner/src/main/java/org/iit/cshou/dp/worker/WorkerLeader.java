@@ -6,6 +6,7 @@ package org.iit.cshou.dp.worker;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
+import org.iit.cshou.dp.aws.QueueService;
 import org.iit.cshou.dp.client.SimpleClient;
 import org.iit.cshou.dp.intl.Request;
 
@@ -29,7 +30,8 @@ public class WorkerLeader extends Thread {
 	
 	// only for local test
 	// TODO remove later
-	protected TestQueue queue = null;
+	// protected TestQueue queue = null;
+	protected QueueService queueService = null;
 	
 	/*
 	 * TODO 
@@ -47,7 +49,8 @@ public class WorkerLeader extends Thread {
 		this.threshold = threshold;
 		this.batchNum = batchNum;
 		
-		queue = TestQueue.getQueue();
+		// queue = TestQueue.getQueue();
+		queueService = QueueService.getQueueService("test-queue-1");
 		
 		counter = new AtomicInteger();
 		
@@ -65,14 +68,29 @@ public class WorkerLeader extends Thread {
 				while (!counter.compareAndSet(threshold, threshold) && 
 						i < this.batchNum) {
 					
-					if (!queue.empty()) {
+//					if (!queue.empty()) {
+//						
+//						Request req = queue.dequeue();
+//						
+//						log.info("Pulled request from queue: " + req);
+//						
+//						new Thread(new Worker(req, this)).start();
+//						
+//					}
+					
+					try {
 						
-						Request req = queue.dequeue();
+						Request req = (Request) queueService.dequeue();
 						
-						log.info("Pulled request from queue: " + req);
+						if (req != null) {
+							
+							log.info("Pulled request from queue: " + req);						
+							new Thread(new Worker(req, this)).start();
+							
+						}
 						
-						new Thread(new Worker(req, this)).start();
-						
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 					
 					i++;

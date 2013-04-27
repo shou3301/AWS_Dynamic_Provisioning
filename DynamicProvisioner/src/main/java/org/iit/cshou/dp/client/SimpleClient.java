@@ -3,6 +3,8 @@
  */
 package org.iit.cshou.dp.client;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -38,7 +40,7 @@ public class SimpleClient {
 	
 	protected ConcurrentMap<String, Request> jobList = null;
 	
-	public SimpleClient (String addr, int schedulerPort, int localPort) throws RemoteException {
+	public SimpleClient (String addr, int schedulerPort, int localPort) throws RemoteException, UnknownHostException {
 		
 		this.schedulerAddr = addr;
 		this.schedulerPort = schedulerPort;
@@ -50,11 +52,13 @@ public class SimpleClient {
 		
 		Registry svcReg = LocateRegistry.createRegistry(REG_PORT);
 		FeedbackHandlerImpl feedbackHandler = new FeedbackHandlerImpl(localPort, this);
-		svcReg.rebind(this.schedulerAddr + "-feedback", feedbackHandler);
+		svcReg.rebind(InetAddress.getLocalHost().getHostAddress() + "-feedback", feedbackHandler);
 		
 	}
 	
 	public void notify (Feedback feedback) throws AccessException, RemoteException, NotBoundException {
+		
+		log.info("Receive feedback - " + feedback);
 		
 		if (feedback.getIsSuccessful()) {	// if job completed successfully
 			log.info("Request " + feedback.getRequestId() + " completed successfully. [" + feedback.getRunningInfo() + "]");

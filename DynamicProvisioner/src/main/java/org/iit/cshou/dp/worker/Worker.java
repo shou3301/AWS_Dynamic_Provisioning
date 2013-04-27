@@ -51,8 +51,10 @@ public class Worker implements Runnable {
 			Feedback feedback = new SimpleFeedback(info, true, request);
 			
 			try {
+				log.info("Sending feedback to client...");
 				feedbackHandler.getFeedback(feedback);
 			} catch (Exception e) {
+				log.info(e);
 				e.printStackTrace();
 			}
 			
