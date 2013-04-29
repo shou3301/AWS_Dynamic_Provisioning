@@ -43,14 +43,14 @@ public class WorkerLeader extends Thread {
 	 * @param threshold the max number of jobs can be run within the current worker leader
 	 * @param batchNum the number of jobs to pull each time
 	 */
-	public WorkerLeader (long interval, int threshold, int batchNum) {
+	public WorkerLeader (long interval, int threshold, int batchNum, String sqsName) {
 		
 		this.interval = interval;
 		this.threshold = threshold;
 		this.batchNum = batchNum;
 		
 		// queue = TestQueue.getQueue();
-		queueService = QueueService.getQueueService("test-queue-1");
+		queueService = QueueService.getQueueService(sqsName);
 		
 		counter = new AtomicInteger();
 		

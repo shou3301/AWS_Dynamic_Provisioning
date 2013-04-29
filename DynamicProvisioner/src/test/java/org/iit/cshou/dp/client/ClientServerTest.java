@@ -31,10 +31,10 @@ public class ClientServerTest {
 			
 			SimpleClient client = new SimpleClient(addr, 6667, 6668);
 			
-			JobScheduler js = new JobScheduler(6669);
+			JobScheduler js = new JobScheduler(6669, "img_name", "test-queue-1");
 			new Thread(js, "Thread-JobScheduler").start();
 			
-			WorkerLeader wl = new WorkerLeader(5000, 10, 5);
+			WorkerLeader wl = new WorkerLeader(5000, 10, 5, "test-queue-1");
 			wl.start();
 			
 			String filepath = "request.txt";

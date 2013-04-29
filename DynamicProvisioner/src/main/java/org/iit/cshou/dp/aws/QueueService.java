@@ -34,7 +34,7 @@ public class QueueService {
 	
 	private Logger log = Logger.getLogger(QueueService.class);
 	
-	private static final String QUEUE_NAME = "test-queue-1";
+	// private static final String QUEUE_NAME = "test-queue-1";
 
 	protected static QueueService queueService = null;
 	
@@ -42,14 +42,14 @@ public class QueueService {
 	
 	protected String sqsUrl = null;
 	
-	private QueueService () {
+	private QueueService (String queueName, int diff) {
 		
 		sqs = new AmazonSQSClient(new ClasspathPropertiesFileCredentialsProvider());
 		Region usWest2 = Region.getRegion(Regions.US_WEST_2);
 		sqs.setRegion(usWest2);
 		
 		log.info("Creating a SQS queue for push requests.");
-		CreateQueueRequest createQueueRequest = new CreateQueueRequest(QUEUE_NAME);
+		CreateQueueRequest createQueueRequest = new CreateQueueRequest(queueName);
         sqsUrl = sqs.createQueue(createQueueRequest).getQueueUrl();
 		
 	}
@@ -69,10 +69,10 @@ public class QueueService {
 	/**
 	 * @return create a new queue service
 	 */
-	public static QueueService createQueueService () {
+	public static QueueService createQueueService (String queueName) {
 		
 		if (queueService == null)
-			queueService = new QueueService();
+			queueService = new QueueService(queueName, 0);
 		
 		return queueService;
 		

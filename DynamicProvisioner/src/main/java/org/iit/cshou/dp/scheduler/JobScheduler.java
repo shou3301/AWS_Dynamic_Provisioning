@@ -39,7 +39,7 @@ public class JobScheduler implements Runnable {
 	// TODO only for test, to be removed later
 	// protected TestQueue queue = null;
 	
-	public JobScheduler (int svcPort) throws Exception {
+	public JobScheduler (int svcPort, String imgName, String sqsName) throws Exception {
 		
 		this.svcPort = svcPort;
 		
@@ -51,8 +51,8 @@ public class JobScheduler implements Runnable {
 		svcReg.rebind(InetAddress.getLocalHost().getHostAddress() + "-request", requestHandler);
 		
 		// here is create queue
-		queueService = QueueService.createQueueService();
-		schedulerDaemon = new SchedulerDaemon(queueService, 30000, 1, 1, 10);
+		queueService = QueueService.createQueueService(sqsName);
+		schedulerDaemon = new SchedulerDaemon(queueService, 30000, 1, 1, 10, imgName);
 		
 		// start daemon to monitor
 		schedulerDaemon.start();

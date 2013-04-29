@@ -28,7 +28,7 @@ public class SchedulerDaemon extends Thread {
 	private Logger log = Logger.getLogger(SchedulerDaemon.class);
 
 	// the name of the original img
-	protected static final String IMG_NAME = "ami-3122b501";
+	protected String IMG_NAME = "";
 
 	protected QueueService qs = null;
 
@@ -45,11 +45,12 @@ public class SchedulerDaemon extends Thread {
 	protected int threshold = 50;
 
 	public SchedulerDaemon(QueueService qs, long interval, int initInstanceNum,
-			int batchNum, int threshold) {
+			int batchNum, int threshold, String imgName) {
 		this.qs = qs;
 		this.batchNum = batchNum;
 		this.interval = interval;
 		this.threshold = threshold;
+		this.IMG_NAME = imgName;
 		
 		// launch 1 instance at the beginning
 		launchInstances(1);

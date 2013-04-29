@@ -11,7 +11,7 @@ public class QueueServiceTest {
 	@Test
 	public void testEnqueue() {
 
-		QueueService qs = QueueService.createQueueService();
+		QueueService qs = QueueService.createQueueService("test-queue-1");
 		
 		Request req1 = new SleepRequest("locahost", 1000, "id-1", 10);
 		Request req2 = new SleepRequest("locahost", 1000, "id-2", 10);
